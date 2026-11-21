@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6d32bb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Meu Controle">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>Meu Controle | Seu dinheiro organizado</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-shell">
+ <aside class="sidebar" aria-label="Menu principal">
+  <div class="brand"><span class="logo">m.</span><span>meu controle<small>FINANÇAS PESSOAIS</small></span></div>
+  <p class="overline">MENU</p>
+  <nav class="sidebar-nav" aria-label="Seções">
+   <button type="button" class="nav active" data-view="home"><span class="nav-icon">⌂</span> Início</button>
+   <button type="button" class="nav" data-view="food"><span class="nav-icon">▣</span> Vale-alimentação</button>
+   <button type="button" class="nav" data-view="transactions"><span class="nav-icon">≡</span> Extrato</button>
+   <button type="button" class="nav" data-view="annual"><span class="nav-icon">▤</span> Planejamento</button>
+   <button type="button" class="nav" data-view="limits"><span class="nav-icon">◷</span> Limites</button>
+   <button type="button" class="nav" data-view="tools"><span class="nav-icon">▦</span> Simuladores</button>
+   <button type="button" class="nav" data-view="settings"><span class="nav-icon">⚙</span> Ajustes e backup</button>
+  </nav>
+  <div class="sidebar-bottom"><span class="avatar">MC</span><div>Seu espaço financeiro<small>Organizado por você.</small></div></div>
+ </aside>
+ <main id="top">
+  <header class="topbar"><div><div class="eyebrow">MEU CONTROLE <span class="pill-local">● Dados no aparelho</span></div><h1 id="screenTitle">Seu dinheiro, do seu jeito.</h1><p id="screenSubtitle">Acompanhe suas contas com clareza.</p></div><span class="top-avatar" aria-hidden="true">MC</span></header>
+  <div class="toolbar" id="monthToolbar"><span>Seu período</span><div class="period"><button type="button" id="prev" aria-label="Mês anterior">‹</button><input type="month" id="month" aria-label="Mês de referência"><button type="button" id="next" aria-label="Próximo mês">›</button></div></div>
+
+  <section class="screen" id="view-home" aria-label="Conta principal">
+   <article class="bank-card main-card"><div class="card-pattern" aria-hidden="true"></div><div class="card-top"><span><span class="account-icon">↗</span> Conta principal</span><span>MEU CONTROLE</span></div><div class="bank-balance-label">Saldo disponível <button class="eye-btn" id="toggleAmounts" type="button" aria-label="Ocultar valores" aria-pressed="false">◉</button></div><div class="bank-value" id="balance">R$ 0,00</div><div class="bank-card-bottom"><div><small>Projeção após lançamentos planejados</small><strong id="forecastBalance">R$ 0,00</strong></div><div><small>Saldo no início do mês</small><strong id="openingMonth">R$ 0,00</strong></div></div></article>
+   <div class="quick-actions"><button type="button" id="addIncome" class="quick-action"><span class="action-round">↓</span><b>Receber</b></button><button type="button" id="addExpense" class="quick-action"><span class="action-round">↑</span><b>Pagar</b></button><button type="button" id="goTransactions" class="quick-action"><span class="action-round">≡</span><b>Extrato</b></button><button type="button" id="goPlan" class="quick-action"><span class="action-round">▤</span><b>Planejar</b></button></div>
+   <div class="section-heading"><div><h2>Resumo de <span id="summaryMonth">mês</span></h2><p>Apenas a movimentação da conta principal neste mês.</p></div></div>
+   <div class="stats-grid"><article class="stat-card"><div class="stat-icon income-icon">↓</div><span>Entradas previstas</span><strong id="income">R$ 0,00</strong><small id="incomeCount">Recebidas e planejadas</small></article><article class="stat-card"><div class="stat-icon expense-icon">↑</div><span>Saídas previstas</span><strong id="expense">R$ 0,00</strong><small id="expenseCount">Pagas e planejadas</small></article></div>
+   <div class="stats-strip"><div><span>Já recebido</span><b id="received">R$ 0,00</b></div><div><span>Já pago</span><b id="paid">R$ 0,00</b></div><div><span>Variação realizada</span><b id="realizedBalance">R$ 0,00</b></div></div>
+   <div class="home-columns"><section class="panel"><div class="panel-heading"><div><h2>Últimas movimentações</h2><p>Entradas e saídas realizadas ou planejadas.</p></div><button type="button" class="text-btn" id="seeAll">Ver extrato ›</button></div><div id="homeRecent" class="recent-list"></div></section><section class="panel food-teaser"><div class="teaser-head"><span class="food-mark">▣</span><span>SEPARADO DA SUA CONTA</span></div><h2>Vale-alimentação</h2><p>Suas recargas e gastos com alimentação em um só lugar.</p><strong id="foodPreviewBalance">R$ 0,00</strong><small>Saldo disponível no vale</small><button type="button" id="openFood" class="outline-btn">Abrir vale-alimentação ›</button></section></div>
+  </section>
+
+  <section class="screen" id="view-food" aria-label="Vale-alimentação" hidden>
+   <article class="bank-card food-card"><div class="card-pattern" aria-hidden="true"></div><div class="card-top"><span><span class="account-icon">▣</span> Meu vale-alimentação</span><span>BENEFÍCIO</span></div><div class="bank-balance-label">Saldo disponível do vale</div><div class="bank-value" id="foodBalance">R$ 0,00</div><div class="bank-card-bottom"><div><small>Saldo previsto</small><strong id="foodForecast">R$ 0,00</strong></div><div><small>Saldo no início do mês</small><strong id="foodStart">R$ 0,00</strong></div></div></article>
+   <div class="quick-actions quick-food"><button type="button" class="quick-action" id="addFoodIncome"><span class="action-round">↓</span><b>Adicionar recarga</b></button><button type="button" class="quick-action" id="addFoodExpense"><span class="action-round">↑</span><b>Registrar compra</b></button></div>
+   <div class="stats-grid"><article class="stat-card"><div class="stat-icon income-icon">↓</div><span>Recargas do mês</span><strong id="foodIncome">R$ 0,00</strong><small>Realizadas e planejadas</small></article><article class="stat-card"><div class="stat-icon expense-icon">↑</div><span>Compras do mês</span><strong id="foodExpense">R$ 0,00</strong><small>Realizadas e planejadas</small></article></div>
+   <section class="panel food-transactions"><div class="panel-heading"><div><h2>Extrato do vale</h2><p>O dinheiro do vale não altera seu saldo principal.</p></div></div><div id="foodRows" class="recent-list"></div><p id="foodEmpty" class="empty" hidden>Nenhuma movimentação neste mês. Registre uma recarga para começar.</p><footer id="foodCount"></footer></section>
+  </section>
+
+  <section class="screen" id="view-transactions" hidden>
+   <section class="panel" id="transactions"><div class="panel-heading"><div><h2>Seu extrato</h2><p>Todos os lançamentos do período selecionado. Edite, filtre por pagamento, calcule atrasos ou marque como realizados.</p></div><button type="button" id="export" class="text-btn">Exportar CSV ↗</button></div>
+    <div class="filters"><input id="search" placeholder="Buscar lançamento..." aria-label="Buscar lançamento"><select id="extractAccount" aria-label="Selecionar conta"><option value="main">Conta principal</option><option value="food">Vale-alimentação</option><option value="all">Ambas as contas</option></select><select id="filter" aria-label="Tipo de lançamento"><option value="all">Entradas e saídas</option><option value="income">Entradas</option><option value="expense">Saídas</option></select><select id="statusFilter" aria-label="Situação"><option value="all">Todos</option><option value="planned">Planejados</option><option value="done">Realizados</option></select><select id="paymentFilter" aria-label="Forma de pagamento"><option value="all">Todos os pagamentos</option><option value="pix">Pix</option><option value="debit">Débito</option><option value="credit">Crédito</option><option value="cash">Dinheiro</option><option value="transfer">Transferência</option><option value="boleto">Boleto</option><option value="deposit">Depósito</option><option value="food">Vale-alimentação</option><option value="other">Outros</option><option value="unspecified">Não informado (antigos)</option></select></div>
+    <div class="table-wrap"><table><thead><tr><th>Movimentação</th><th>Data</th><th>Situação</th><th>Valor</th><th><span class="sr-only">Ações</span></th></tr></thead><tbody id="rows"></tbody></table><div id="empty" class="empty" hidden><div class="empty-icon">≡</div><h3>Seu extrato começa aqui</h3><p>Adicione uma movimentação para acompanhar o dinheiro.</p><button type="button" id="first" class="secondary">+ Novo lançamento</button></div></div><footer id="count"></footer>
+   </section>
+   <section class="panel categories"><h2>Despesas por categoria</h2><p>Visão da conta principal, incluindo despesas planejadas.</p><div id="chart"></div><div id="legend"></div><div class="insight"><b>Realizado × planejado</b><p>Somente lançamentos realizados mudam o saldo disponível. Compras no crédito devem ficar planejadas até o pagamento da fatura; use a data de vencimento para projetar a saída de dinheiro.</p></div></section>
+  </section>
+
+  <section class="screen" id="view-annual" hidden><section class="panel annual" id="annual"><div class="panel-heading annual-heading"><div><h2>Planejamento anual</h2><p>Confira como seu saldo passa de um mês para o outro.</p></div><label class="year-label">Ano <input type="number" id="year" min="1900" max="2100" step="1" value="2026"></label></div><div class="plan-switch"><label>Conta <select id="planAccount"><option value="main">Conta principal</option><option value="food">Vale-alimentação</option></select></label></div><div class="annual-total" id="annualTotals" aria-live="polite"></div><div class="year-grid" id="yearGrid"></div><p class="note">O saldo de cada mês é acumulado: considera o saldo inicial e as movimentações dos meses anteriores. A projeção inclui lançamentos planejados.</p></section></section>
+
+  <section class="screen" id="view-limits" hidden><section class="panel limits" id="limits"><div class="panel-heading"><div><h2>Seus limites de gastos</h2><p>Controle o orçamento mensal da conta principal, por categoria.</p></div></div><form id="budgetForm" class="budget-form"><label>Categoria<select id="budgetCategory"></select></label><label>Limite (R$)<input id="budgetAmount" inputmode="decimal" placeholder="Ex.: 500,00" required></label><label class="checkbox-label"><input type="checkbox" id="budgetAll"> Aplicar aos 12 meses do ano do planejamento</label><div class="budget-buttons"><button type="submit" class="primary">Salvar limite</button><button type="button" id="removeBudget" class="outline-btn">Remover limite</button></div></form><p class="error" id="budgetError" role="alert"></p><div id="budgetList" aria-live="polite"></div></section></section>
+
+  <section class="screen" id="view-tools" hidden aria-label="Simuladores financeiros">
+    <div class="tools-intro"><h2>Faça as contas antes de decidir.</h2><p>Simule atrasos, investimentos, financiamentos e consórcios sem alterar o saldo ou seus lançamentos.</p></div>
+    <div class="tools-grid">
+      <section class="panel tool-panel" id="lateTool">
+        <div class="tool-title"><span class="tool-icon">◷</span><div><h2>Parcela atrasada</h2><p>Calcule multa e juros simples proporcionais aos dias de atraso.</p></div></div>
+        <form id="lateForm" class="tool-form">
+          <label>Valor original (R$)<input id="latePrincipal" inputmode="decimal" value="500,00" required></label>
+          <label>Data de vencimento<input id="lateDue" type="date" min="1900-01-01" max="2100-12-31" required></label>
+          <label>Data do pagamento<input id="latePaid" type="date" min="1900-01-01" max="2100-12-31" required></label>
+          <label>Multa única (%)<input id="latePenalty" inputmode="decimal" value="2" required></label>
+          <label>Juros simples por mês (%)<input id="lateInterest" inputmode="decimal" value="1" required></label>
+          <button type="submit" class="primary tool-submit">Calcular atraso</button>
+        </form>
+        <p class="error" id="lateError" role="alert"></p>
+        <div class="tool-result" id="lateResult" aria-live="polite" hidden>
+          <span class="result-eyebrow">VALOR TOTAL ATUALIZADO</span><strong class="result-main" id="lateTotal">R$ 0,00</strong>
+          <div class="result-pairs"><div><span>Dias de atraso</span><b id="lateDays">0</b></div><div><span>Valor original</span><b id="lateOriginal">R$ 0,00</b></div><div><span>Multa</span><b id="lateFine">R$ 0,00</b></div><div><span>Juros</span><b id="lateInterestTotal">R$ 0,00</b></div></div>
+        </div>
+        <p class="tool-note">Taxas ilustrativas e editáveis: confirme as regras do contrato. Cálculo com mês de 30 dias, juros simples e multa aplicada uma vez quando há atraso. Não inclui correção monetária, impostos ou cobranças adicionais.</p>
+      </section>
+      <section class="panel tool-panel" id="investmentTool">
+        <div class="tool-title"><span class="tool-icon">↗</span><div><h2>Rendimento mensal</h2><p>Projete juros compostos e aportes no fim de cada mês.</p></div></div>
+        <form id="investmentForm" class="tool-form">
+          <label>Investimento inicial (R$)<input id="investmentInitial" inputmode="decimal" value="1.000,00" required></label>
+          <label>Aporte mensal (R$)<input id="investmentContribution" inputmode="decimal" value="100,00" required></label>
+          <label>Taxa mensal estimada (%)<input id="investmentRate" inputmode="decimal" value="1" required></label>
+          <label>Prazo em meses<input id="investmentMonths" type="number" min="1" max="360" step="1" value="12" required></label>
+          <button type="submit" class="primary tool-submit">Simular rendimento</button>
+        </form>
+        <p class="error" id="investmentError" role="alert"></p>
+        <div class="tool-result" id="investmentResult" aria-live="polite" hidden>
+          <span class="result-eyebrow">SALDO BRUTO ESTIMADO</span><strong class="result-main" id="investmentFinal">R$ 0,00</strong>
+          <div class="result-pairs"><div><span>Total aplicado</span><b id="investmentDeposited">R$ 0,00</b></div><div><span>Rendimento acumulado</span><b id="investmentEarnings">R$ 0,00</b></div></div>
+          <h3 class="tool-table-heading">Evolução mês a mês</h3>
+          <div class="tool-table-wrap"><table class="tool-table"><thead><tr><th>Mês</th><th>Rendimento</th><th>Aporte</th><th>Saldo estimado</th></tr></thead><tbody id="investmentRows"></tbody></table></div>
+        </div>
+        <p class="tool-note">Simulação com taxa mensal constante e juros compostos, sem impostos, taxas, inflação ou garantia de retorno. Valores estimados não entram no saldo do aplicativo. Rendimentos negativos também podem ocorrer em investimentos reais.</p>
+      </section>
+
+      <section class="panel tool-panel" id="financingTool">
+        <div class="tool-title"><span class="tool-icon">▤</span><div><h2>Simular financiamento</h2><p>Compare prestações Price e SAC, juros pagos e saldo devedor ao longo dos meses.</p></div></div>
+        <form id="financingForm" class="tool-form">
+          <label>Valor do bem (R$)<input id="finAsset" inputmode="decimal" value="150.000,00" required></label>
+          <label>Entrada (R$)<input id="finDown" inputmode="decimal" value="30.000,00" required></label>
+          <label>Juros efetivos ao mês (%)<input id="finRate" inputmode="decimal" value="1" required></label>
+          <label>Quantidade de parcelas<input id="finMonths" type="number" min="1" max="500" step="1" value="120" required></label>
+          <label class="wide">Sistema de amortização<select id="finSystem"><option value="price">Price — prestação aproximadamente fixa</option><option value="sac">SAC — amortização constante, prestação decrescente</option></select></label>
+          <button type="submit" class="primary tool-submit">Simular financiamento</button>
+        </form>
+        <p class="error" id="financingError" role="alert"></p>
+        <div class="tool-result" id="financingResult" aria-live="polite" hidden>
+          <span class="result-eyebrow">PRESTAÇÃO INICIAL ESTIMADA</span><strong class="result-main" id="finFirst">R$ 0,00</strong>
+          <div class="result-pairs">
+            <div><span>Última prestação</span><b id="finLast">R$ 0,00</b></div>
+            <div><span>Valor financiado</span><b id="finBorrowed">R$ 0,00</b></div>
+            <div><span>Total de juros</span><b id="finInterestTotal">R$ 0,00</b></div>
+            <div><span>Total das prestações</span><b id="finPaymentsTotal">R$ 0,00</b></div>
+            <div><span>Custo com entrada</span><b id="finFullCost">R$ 0,00</b></div>
+          </div>
+          <h3 class="tool-table-heading">Evolução da dívida</h3>
+          <div class="tool-table-wrap"><table class="tool-table"><thead><tr><th>Mês</th><th>Prestação</th><th>Juros</th><th>Amortização</th><th>Saldo devedor</th></tr></thead><tbody id="financingRows"></tbody></table></div>
+        </div>
+        <p class="tool-note">Estimativa pelas tabelas Price ou SAC com taxa mensal constante e arredondamento em centavos. Não inclui seguros, tarifas, IOF, correção monetária, CET ou condições específicas do contrato. Em Price, a última parcela pode variar por arredondamento.</p>
+      </section>
+      <section class="panel tool-panel" id="consortiumTool">
+        <div class="tool-title"><span class="tool-icon">◈</span><div><h2>Simular consórcio</h2><p>Estime a parcela inicial sem reajustes, incluindo administração e fundo de reserva.</p></div></div>
+        <form id="consortiumForm" class="tool-form">
+          <label>Valor da carta de crédito (R$)<input id="consCredit" inputmode="decimal" value="100.000,00" required></label>
+          <label>Quantidade de parcelas<input id="consMonths" type="number" min="1" max="500" step="1" value="100" required></label>
+          <label>Taxa de administração total (%)<input id="consAdmin" inputmode="decimal" value="15" required></label>
+          <label>Fundo de reserva total (%)<input id="consReserve" inputmode="decimal" value="2" required></label>
+          <button type="submit" class="primary tool-submit">Simular consórcio</button>
+        </form>
+        <p class="error" id="consortiumError" role="alert"></p>
+        <div class="tool-result" id="consortiumResult" aria-live="polite" hidden>
+          <span class="result-eyebrow">PARCELA ESTIMADA SEM REAJUSTE</span><strong class="result-main" id="consFirst">R$ 0,00</strong>
+          <div class="result-pairs">
+            <div><span>Última parcela</span><b id="consLast">R$ 0,00</b></div>
+            <div><span>Carta de crédito</span><b id="consOriginal">R$ 0,00</b></div>
+            <div><span>Administração total</span><b id="consAdminValue">R$ 0,00</b></div>
+            <div><span>Fundo de reserva</span><b id="consReserveValue">R$ 0,00</b></div>
+            <div><span>Total estimado</span><b id="consTotal">R$ 0,00</b></div>
+          </div>
+        </div>
+        <p class="tool-note">Consórcio não tem juros de financiamento, mas tem taxas e pode ter reajustes da carta e das prestações, seguro, despesas e regras de contemplação. Esta simulação não prevê contemplação, lances, correção ou devolução de fundo de reserva; confirme o contrato da administradora.</p>
+      </section>
+    </div>
+  </section>
+
+  <section class="screen" id="view-settings" hidden><section class="panel settings-panel"><h2>Saldo inicial das contas</h2><p>Informe quanto você já tinha antes de começar a registrar suas movimentações. O saldo inicial é somado ao histórico, sem misturar as contas.</p><form id="openingForm" class="opening-form"><label>Saldo inicial da conta principal (R$)<input id="mainOpening" inputmode="decimal" placeholder="0,00" required></label><label>Saldo inicial do vale-alimentação (R$)<input id="foodOpening" inputmode="decimal" placeholder="0,00" required></label><button class="primary" type="submit">Salvar saldos iniciais</button></form><p class="error" id="openingError" role="alert"></p></section><section class="panel update-panel" id="updatesPanel"><div class="panel-heading"><div><h2>Atualizações do aplicativo</h2><p>Versão iPhone/Web: as melhorias chegam pelo link, sem instalar APK.</p></div><span class="version-badge" id="installedVersion">v3.4.0</span></div><p class="update-status" id="updateStatus" aria-live="polite">Toque para consultar a versão mais recente.</p><p id="releaseNotes" class="update-notes" hidden></p><div class="storage-actions"><button type="button" id="checkUpdates" class="primary">↻ Verificar atualizações</button><button type="button" id="downloadUpdate" class="outline-btn" hidden>Baixar atualização</button></div><p class="update-info">Para atualizar, conecte-se à internet e toque em Verificar atualizações. Faça backup antes de trocar de aparelho ou limpar os dados do Safari.</p></section><section class="panel tool-shortcut"><div><h2>Simuladores financeiros</h2><p>Simule atrasos, rendimentos, financiamento e consórcio sem alterar seu dinheiro registrado.</p></div><button type="button" id="openTools" class="outline-btn">Abrir simuladores ›</button></section><section class="panel storage"><div><b>Suas informações ficam neste dispositivo.</b><p>Não há conexão com bancos nem sincronização automática. No iPhone, dados deste link ficam separados dos dados do APK Android. Exporte um backup JSON regularmente; apagar dados do Safari ou remover o app pode apagar os registros.</p></div><div class="storage-actions"><button type="button" id="backup" class="primary">Salvar cópia JSON</button><button type="button" id="restore" class="outline-btn">Restaurar cópia</button><input type="file" id="file" accept="application/json,.json" hidden></div></section><section class="panel pwa-help" id="iphoneHelp"><div class="panel-heading"><div><h2>Instalar no iPhone</h2><p>Abra este link no <strong>Safari</strong>, toque em Compartilhar e escolha <strong>Adicionar à Tela de Início</strong>. Depois abra pelo ícone Meu Controle.</p></div></div><p>Os dados são salvos localmente neste aparelho. Para transferir do Android, crie um backup JSON no Android e importe em Ajustes &gt; Restaurar cópia no iPhone.</p><p><strong>Privacidade:</strong> o aplicativo não envia seus lançamentos para o GitHub. A internet é usada apenas para carregar e atualizar os arquivos do aplicativo.</p></section><p class="settings-note">Este é um controle pessoal manual, não uma conta bancária e não movimenta dinheiro de verdade.</p></section>
+  <div class="signature">MEU CONTROLE <span>Seu dinheiro merece clareza.</span></div>
+ </main>
+</div>
+<nav class="bottom-nav" aria-label="Navegação inferior"><button type="button" class="bottom-item active" data-view="home"><span>⌂</span>Início</button><button type="button" class="bottom-item" data-view="food"><span>▣</span>Vale</button><button type="button" class="bottom-item" data-view="transactions"><span>≡</span>Extrato</button><button type="button" class="bottom-item" data-view="annual"><span>▤</span>Plano</button><button type="button" class="bottom-item" data-view="tools"><span>▦</span>Simular</button><button type="button" class="bottom-item" data-view="settings"><span>⚙</span>Ajustes</button></nav>
+<button type="button" id="add" class="fab" aria-label="Adicionar lançamento">+</button>
+<dialog id="dialog"><form id="form"><div class="dialog-head"><div><span class="eyebrow">MOVIMENTAÇÃO MANUAL</span><h2 id="dialogTitle">Novo lançamento</h2></div><button type="button" id="close" aria-label="Fechar">×</button></div><div class="form-grid">
+ <label>Conta<select id="account" name="account"><option value="main">Conta principal</option><option value="food">Vale-alimentação</option></select></label><label>Tipo<select name="type" id="type"><option value="expense">Saída / pagamento</option><option value="income">Entrada / recebimento</option></select></label>
+ <label class="wide"><span id="amountLabel">Valor (R$)</span><input name="amount" id="amount" inputmode="decimal" placeholder="0,00" required></label><label class="wide">Descrição<input name="description" id="description" maxlength="100" placeholder="Ex.: salário, mercado, aluguel" required></label><label><span id="dateLabel">Data</span><input type="date" name="date" id="date" min="1900-01-01" max="2100-12-31" required></label><label>Categoria<select name="category" id="category"></select></label><label class="wide">Forma de pagamento ou recebimento<select name="paymentMethod" id="paymentMethod"></select><small id="paymentHelp" class="credit-help" hidden>Informe na data o vencimento da primeira fatura. O valor de cada parcela ficará planejado até você confirmar o pagamento; não registre a fatura novamente para não duplicar gastos.</small></label>
+ <label class="wide">Banco ou instituição utilizada (opcional)<input id="bank" name="bank" list="banks" maxlength="80" placeholder="Ex.: Nubank, Itaú, Caixa, Alelo ou carteira"><small>Preencha em qualquer forma de pagamento ou recebimento; também vale para o vale-alimentação.</small></label>
+ <datalist id="banks"><option value="Nubank"><option value="Banco do Brasil"><option value="Caixa"><option value="Itaú"><option value="Bradesco"><option value="Santander"><option value="Inter"><option value="C6 Bank"><option value="Mercado Pago"><option value="PicPay"><option value="Alelo"><option value="VR"></datalist>
+ <div class="wide credit-details" id="creditDetails" hidden><h3>Detalhes da compra no crédito</h3><div id="creditNewFields" class="credit-fields">
+ <label>Quantidade de parcelas<input id="creditInstallments" name="creditInstallments" type="number" min="1" max="500" step="1" value="1" inputmode="numeric"></label>
+ <label class="credit-interest-toggle"><input id="hasInterest" name="hasInterest" type="checkbox"> Esta compra tem juros?</label>
+ <label class="wide" id="creditInterestWrap" hidden>Juros totais sobre a compra (%)<input id="creditInterest" name="creditInterest" inputmode="decimal" placeholder="Ex.: 10" value="0"><small>Percentual único sobre o valor da compra; não é taxa mensal nem cálculo de juros compostos.</small></label>
+ <div class="credit-summary wide" id="creditSummary" aria-live="polite">Informe o valor e a quantidade de parcelas para simular.</div>
+ </div><p id="creditEditNotice" class="form-hint" hidden>Você está editando uma parcela individual. Para mudar juros ou quantidade de parcelas da compra, exclua a série e cadastre novamente. O campo Valor acima é o valor desta parcela.</p></div>
+ <label class="wide">Situação<select name="status" id="status"><option value="done">Realizado (já pago/recebido)</option><option value="planned">Planejado (ainda não aconteceu)</option></select></label>
+ <label class="wide" id="recurrenceWrap">Repetição<select id="recurrence" name="recurrence"><option value="single">Somente esta vez</option><option value="fixed">Repetir todo mês</option><option value="installment">Compra parcelada</option></select></label><label class="wide" id="untilWrap" hidden>Repetir até o mês<input type="month" id="until" name="until"></label><label class="wide" id="installmentsWrap" hidden>Quantidade de parcelas<input type="number" id="installments" name="installments" min="2" max="500" step="1" value="2"><small>O valor acima será distribuído entre as parcelas. Para crédito, use os campos específicos acima.</small></label>
+ </div><p class="form-hint" id="editHint" hidden>Esta edição altera somente o lançamento selecionado, não os outros meses da série.</p><p class="error" id="error" role="alert"></p><div class="dialog-actions"><button type="button" id="cancel" class="outline-btn">Cancelar</button><button class="primary" type="submit">Salvar lançamento</button></div><div class="dialog-delete-actions"><button type="button" id="deleteEntry" class="danger-btn" hidden>Excluir lançamento</button><button type="button" id="deleteSeries" class="danger-btn" hidden>Excluir toda a série</button></div></form></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="finance-core.js"></script><script src="app.js"></script><script src="pwa.js"></script>
+</body></html>
